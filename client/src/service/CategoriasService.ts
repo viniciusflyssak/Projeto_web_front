@@ -1,6 +1,6 @@
 import { api } from "@/lib/axios";
 
-const URL = "/produtos";
+const URL = "/categorias";
 
 const findAll = async () => {
   let response;
@@ -12,5 +12,5 @@ const findAll = async () => {
   return response;
 };
 
-const ProdutoService = { findAll };
-export default ProdutoService;
+const CategoriasService = { findAll };
+export default CategoriasService;

@@ -1,14 +1,36 @@
-import CategoryService from "@/service/CategoryService";
-import Dropdown from 'react-bootstrap/Dropdown';
+import { ICategoria } from "@/commons/interfaces";
+import CategoriasService from "@/service/CategoriasService";
+import { useEffect, useState } from "react";
+import Dropdown from "react-bootstrap/Dropdown";
 
-export function NavBar() {
-  let categorias = [];
+interface NavBarProps {
+  pesquisa: string;
+  setPesquisa: (term: string) => void;
+  categoriaSelecionada: ICategoria | null;
+  setCategoriaSelecionada: (categoria: ICategoria | null) => void;
+}
+
+export function NavBar({
+  pesquisa,
+  setPesquisa,
+  categoriaSelecionada,
+  setCategoriaSelecionada,
+}: NavBarProps) {
+  const [categorias, setCategorias] = useState<ICategoria[]>([]);
+
+  useEffect(() => {
+    carregarCategorias();
+  }, []);
 
   const carregarCategorias = async () => {
-    const response = await CategoryService.findAll();
+    const response = await CategoriasService.findAll();
     if (response.status === 200) {
-      categorias = response.data;
+      setCategorias(response.data);
     }
+  };
+
+  const handleCategoriaSelect = (categoria: ICategoria) => {
+    setCategoriaSelecionada(categoria);
   };
 
   return (
@@ -26,18 +48,28 @@ export function NavBar() {
         <div className="col-2 pt-2">
           <Dropdown>
             <Dropdown.Toggle variant="secondary" id="dropdown-basic">
-              Categorias
+              {categoriaSelecionada ? categoriaSelecionada.nome : "Categorias"}
             </Dropdown.Toggle>
-
             <Dropdown.Menu>
-              <Dropdown.Item href="#/action-1">Celular</Dropdown.Item>
-              <Dropdown.Item href="#/action-2">Console</Dropdown.Item>
-              <Dropdown.Item href="#/action-3">Informatica</Dropdown.Item>
+              {categorias.map((categoria) => (
+                <Dropdown.Item
+                  key={categoria.id}
+                  onClick={() => handleCategoriaSelect(categoria)}
+                >
+                  {categoria.nome}
+                </Dropdown.Item>
+              ))}
             </Dropdown.Menu>
           </Dropdown>
         </div>
         <div className="col-6 pt-2">
-          <input type="text" className="form-control" placeholder="Pesquisar" />
+          <input
+            type="text"
+            className="form-control"
+            placeholder="Pesquisar"
+            value={pesquisa}
+            onChange={(e) => setPesquisa(e.target.value)}
+          />
         </div>
         <div className="col-1 pt-2">
           <button className="btn btn-success">

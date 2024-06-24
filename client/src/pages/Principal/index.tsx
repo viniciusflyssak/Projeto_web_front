@@ -1,36 +1,65 @@
+import { ICategoria, IProduto } from "@/commons/interfaces";
 import CardProduto from "@/components/CardProduto";
 import { NavBar } from "@/components/NavBar";
+import ProdutosService from "@/service/ProdutosService";
+import { useEffect, useState } from "react";
 
 export function Principal() {
-  const produtos = [
-    {
-      id: 1,
-      nome: "Playstation 5",
-      preco: 2000,
-      imagem:
-        "https://www.araquariev.com.br/wp-content/uploads/sites/445/2015/10/Logo-teste.jpg",
-    },
-    {
-      id: 2,
-      nome: "Iphone 15",
-      preco: 4000,
-      imagem:
-        "https://a-static.mlcdn.com.br/500x500/aspirador-de-po-e-agua-wap-1400w-gtw-compact-preto-e-turquesa/magazineluiza/237917600/c8eb0a90b9c3f2e5eb19811b17fe8cb0.jpg",
-    },
-  ];
+  const [listaProdutos, setListaProdutos] = useState<IProduto[]>([]);
+  const [filteredData, setFilteredData] = useState<IProduto[]>([]);
+  const [apiError, setApiError] = useState("");
+  const [pesquisa, setPesquisa] = useState("");
+  const [categoriaSelecionada, setCategoriaSelecionada] = useState<ICategoria | null>(null);
+
+  useEffect(() => {
+    loadData();
+  }, []);
+
+  useEffect(() => {
+    let filtered = listaProdutos;
+    if (pesquisa) {
+      filtered = listaProdutos.filter((produto) =>
+        produto.nome.toLowerCase().includes(pesquisa.toLowerCase())
+      );
+    }
+
+    if (categoriaSelecionada) {
+      filtered = listaProdutos.filter((produto) =>
+        produto.categoria.id === categoriaSelecionada.id);
+    }
+
+    setFilteredData(filtered);
+  }, [pesquisa, categoriaSelecionada, listaProdutos]);
+
+  const loadData = async () => {
+    try {
+      const response = await ProdutosService.findAll();
+      if (response.status === 200) {
+        setListaProdutos(response.data);
+        setFilteredData(response.data);
+      } else {
+        setApiError("Falha ao carregar a lista de produtos!");
+      }
+    } catch (error) {
+      setApiError("Falha ao carregar a lista de produtos!");
+    }
+  };
+
   return (
     <>
       <main className="container">
-        <NavBar />
+        <NavBar pesquisa={pesquisa} setPesquisa={setPesquisa} categoriaSelecionada={categoriaSelecionada} setCategoriaSelecionada={setCategoriaSelecionada}/>
         <div className="row">
-          {produtos.map((produto) => (
+          {filteredData.map((produto) => (
             <CardProduto
+              key={produto.idProduto}
               titulo={produto.nome}
               preco={produto.preco}
               imagem={produto.imagem}
             />
           ))}
         </div>
+        {apiError && <p>{apiError}</p>}
       </main>
     </>
   );
