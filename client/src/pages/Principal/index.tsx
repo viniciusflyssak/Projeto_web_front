@@ -1,15 +1,18 @@
 import { ICategoria, IProduto } from "@/commons/interfaces";
 import CardProduto from "@/components/CardProduto";
-import { NavBar } from "@/components/NavBar";
+import { NavBarPesquisa } from "@/components/NavBarPesquisa";
 import ProdutosService from "@/service/ProdutosService";
 import { useEffect, useState } from "react";
 
 export function Principal() {
   const [listaProdutos, setListaProdutos] = useState<IProduto[]>([]);
-  const [filteredData, setFilteredData] = useState<IProduto[]>([]);
+  const [listaProdutosFiltrada, setlistaProdutosFiltrada] = useState<
+    IProduto[]
+  >([]);
   const [apiError, setApiError] = useState("");
   const [pesquisa, setPesquisa] = useState("");
-  const [categoriaSelecionada, setCategoriaSelecionada] = useState<ICategoria | null>(null);
+  const [categoriaSelecionada, setCategoriaSelecionada] =
+    useState<ICategoria | null>(null);
 
   useEffect(() => {
     loadData();
@@ -24,11 +27,12 @@ export function Principal() {
     }
 
     if (categoriaSelecionada) {
-      filtered = listaProdutos.filter((produto) =>
-        produto.categoria.id === categoriaSelecionada.id);
+      filtered = listaProdutos.filter(
+        (produto) => produto.categoria.id === categoriaSelecionada.id
+      );
     }
 
-    setFilteredData(filtered);
+    setlistaProdutosFiltrada(filtered);
   }, [pesquisa, categoriaSelecionada, listaProdutos]);
 
   const loadData = async () => {
@@ -36,7 +40,7 @@ export function Principal() {
       const response = await ProdutosService.findAll();
       if (response.status === 200) {
         setListaProdutos(response.data);
-        setFilteredData(response.data);
+        setlistaProdutosFiltrada(response.data);
       } else {
         setApiError("Falha ao carregar a lista de produtos!");
       }
@@ -47,10 +51,15 @@ export function Principal() {
 
   return (
     <>
+      <NavBarPesquisa
+        pesquisa={pesquisa}
+        setPesquisa={setPesquisa}
+        categoriaSelecionada={categoriaSelecionada}
+        setCategoriaSelecionada={setCategoriaSelecionada}
+      />
       <main className="container">
-        <NavBar pesquisa={pesquisa} setPesquisa={setPesquisa} categoriaSelecionada={categoriaSelecionada} setCategoriaSelecionada={setCategoriaSelecionada}/>
         <div className="row">
-          {filteredData.map((produto) => (
+          {listaProdutosFiltrada.map((produto) => (
             <CardProduto
               key={produto.idProduto}
               titulo={produto.nome}

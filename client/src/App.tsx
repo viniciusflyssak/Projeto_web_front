@@ -1,12 +1,9 @@
-import { Route, Routes } from "react-router-dom";
-import { Principal } from "./pages/Principal";
+import { BaseRoutes } from "./routes/BaseRoutes";
 
 function App() {
   return (
     <>
-      <Routes>
-        <Route path="/" element={<Principal />} />
-      </Routes>
+      <BaseRoutes />
     </>
   );
 }
