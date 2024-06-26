@@ -15,7 +15,7 @@ export function Principal() {
     useState<ICategoria | null>(null);
 
   useEffect(() => {
-    loadData();
+    carregarDados();
   }, []);
 
   useEffect(() => {
@@ -43,7 +43,7 @@ export function Principal() {
     setlistaProdutosFiltrada(filtered);
   }, [pesquisa, categoriaSelecionada, listaProdutos]);
 
-  const loadData = async () => {
+  const carregarDados = async () => {
     try {
       const response = await ProdutosService.findAll();
       if (response.status === 200) {
@@ -70,6 +70,7 @@ export function Principal() {
           {listaProdutosFiltrada.map((produto) => (
             <CardProduto
               key={produto.idProduto}
+              id={produto.idProduto}
               titulo={produto.nome}
               preco={produto.preco}
               imagem={produto.imagem}

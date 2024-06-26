@@ -1,11 +1,15 @@
-import Button from "react-bootstrap/Button";
-import Card from "react-bootstrap/Card";
+import { Button, Card } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
 
 function CardProduto(produto: {
+  id: number;
   titulo: string;
   preco: number;
   imagem: string;
 }) {
+  const navigate = useNavigate();
+  const id = produto.id;
+
   return (
     <div className="col-3">
       <Card style={{ width: "18rem" }} className="bg-light shadow-sm">
@@ -20,8 +24,12 @@ function CardProduto(produto: {
           <Card.Text>R$ {produto.preco} </Card.Text>
           <div className="row">
             <div className="col-6">
-              <Button variant="primary" >Visualizar descrição</Button>
-             
+              <Button
+                variant="primary"
+                onClick={() => navigate(`/detalhesProdutos/${id}`)}
+              >
+                Visualizar descrição
+              </Button>
             </div>
             <div className="col-6">
               <Button variant="success">Adicionar ao carrinho</Button>

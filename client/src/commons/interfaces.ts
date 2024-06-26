@@ -19,13 +19,13 @@ export interface IUser {
 }
 
 export interface ICategoria {
-  id?: number;
+  id: number;
   nome: string;
 }
 export interface IProduto {
-  idProduto?: number;
+  idProduto: number;
   nome: string;
-  descricao: number;
+  descricao: string;
   preco: number;
   imagem: string;
   categoria: ICategoria;

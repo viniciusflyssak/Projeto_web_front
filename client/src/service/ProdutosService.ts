@@ -12,5 +12,15 @@ const findAll = async () => {
   return response;
 };
 
-const ProdutosService = { findAll };
+const findOne = async (id: string) => {
+  let response;
+  try {
+    response = await api.get(URL+"/"+id);
+  } catch (error: any) {
+    response = error.response;
+  }
+  return response;
+};
+
+const ProdutosService = { findAll, findOne };
 export default ProdutosService;
