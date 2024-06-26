@@ -25,6 +25,21 @@ export function ListaDePedidos() {
     }
   };
 
+  const retornaNomeFormaPagamento = (formaPagamento: FormaPgtoEnum) => {
+    switch (formaPagamento) {
+      case 0:
+        return "Boleto";
+      case 1:
+        return "Cartão de crédito";
+      case 2:
+        return "Cartão de débito";
+      case 3:
+        return "Pix";
+      default:
+        return "Forma de pagamento não identificada";
+    }
+  };
+
   return (
     <>
       <NavBar />
@@ -66,6 +81,9 @@ export function ListaDePedidos() {
                     </Card>
                   ))}
                 </div>
+                <Card.Text className="text-end" style={{ fontSize: "1.3rem" }}>
+                  <strong>Forma de pagamento: {retornaNomeFormaPagamento(pedido.formaPagamento)}</strong>
+                </Card.Text>
                 <Card.Text className="text-end" style={{ fontSize: "1.3rem" }}>
                   <strong>
                     Valor total: R$ {pedido.valor.toFixed(2).replace(".", ",")}

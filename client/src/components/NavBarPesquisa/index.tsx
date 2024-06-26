@@ -34,7 +34,7 @@ export function NavBarPesquisa({
   };
 
   return (
-    <div className="bg-dark shadow-sm mb-2" style={{width: "100%"}}>
+    <div className="bg-dark shadow-sm mb-2" style={{ width: "100%" }}>
       <div className="row pe-0">
         <div className="col-2">
           <img
@@ -45,12 +45,18 @@ export function NavBarPesquisa({
             alt="Logo"
           />
         </div>
-        <div className="col-1 pt-2">
+        <div className="col-2 pt-2">
           <Dropdown>
             <Dropdown.Toggle variant="secondary" id="dropdown-basic">
-              {categoriaSelecionada ? categoriaSelecionada.nome : "Categorias"}
+              Categorias: {categoriaSelecionada ? categoriaSelecionada.nome : "Todas"}
             </Dropdown.Toggle>
             <Dropdown.Menu>
+              <Dropdown.Item
+                key={0}
+                onClick={() => handleCategoriaSelect({ id: 0, nome: "Todas" })}
+              >
+                Todas
+              </Dropdown.Item>
               {categorias.map((categoria) => (
                 <Dropdown.Item
                   key={categoria.id}
@@ -62,7 +68,7 @@ export function NavBarPesquisa({
             </Dropdown.Menu>
           </Dropdown>
         </div>
-        <div className="col-6 pt-2">
+        <div className="col-5 pt-2">
           <input
             type="text"
             className="form-control"

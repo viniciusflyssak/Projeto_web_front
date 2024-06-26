@@ -20,16 +20,24 @@ export function Principal() {
 
   useEffect(() => {
     let filtered = listaProdutos;
-    if (pesquisa) {
-      filtered = listaProdutos.filter((produto) =>
-        produto.nome.toLowerCase().includes(pesquisa.toLowerCase())
-      );
-    }
-
-    if (categoriaSelecionada) {
+    if (pesquisa && (categoriaSelecionada?.id !== 0 && categoriaSelecionada?.id !== undefined)) {
       filtered = listaProdutos.filter(
-        (produto) => produto.categoria.id === categoriaSelecionada.id
+        (produto) =>
+          produto.nome.toLowerCase().includes(pesquisa.toLowerCase()) &&
+          produto.categoria.id === categoriaSelecionada?.id
       );
+    } else {
+      if (pesquisa) {
+        filtered = listaProdutos.filter((produto) =>
+          produto.nome.toLowerCase().includes(pesquisa.toLowerCase())
+        );
+      } else {
+        if (categoriaSelecionada?.id !== 0 && categoriaSelecionada?.id !== undefined) {
+          filtered = listaProdutos.filter(
+            (produto) => produto.categoria.id === categoriaSelecionada?.id
+          );
+        }
+      }
     }
 
     setlistaProdutosFiltrada(filtered);
