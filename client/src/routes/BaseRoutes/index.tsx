@@ -1,9 +1,11 @@
-import { LoginPage } from "@/pages/LoginPage";
-import { UserSignupPage } from "@/pages/UserSignupPage";
+
 import { Route, Routes } from "react-router-dom";
 import { AuthenticatedRoutes } from "../AuthenticatedRoutes";
 import { Principal } from "@/pages/Principal";
 import { ListaDePedidos } from "@/pages/ListaDePedidos";
+import { Entrar } from "@/pages/Entrar";
+import { Cadastrar } from "@/pages/Cadastrar";
+import { FinalizarCompra } from "@/pages/FinalizarCompra";
 
 export function BaseRoutes() {
   return (
@@ -12,8 +14,9 @@ export function BaseRoutes() {
         {/*Public routes */}
         <Route path="/" element={<Principal />} />
         <Route path="/principal" element={<Principal />} />
-        <Route path="/entrar" element={<LoginPage />} />
-        <Route path="/cadastrar" element={<UserSignupPage />} />
+        <Route path="/entrar" element={<Entrar />} />
+        <Route path="/cadastrar" element={<Cadastrar />} />
+        <Route path="/finalizar" element={<FinalizarCompra/>} />
         <Route path="/listaDePedidos" element={<ListaDePedidos />}/> //TODO: Mover para rotas privadas
 
         {/*Private routes */}
