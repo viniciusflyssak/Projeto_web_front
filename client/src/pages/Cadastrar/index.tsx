@@ -47,7 +47,7 @@ export function Cadastrar() {
     if (response.status === 200 || response.status === 201) {
       setApiSuccess("Novo usuário cadastrado!");
       setTimeout(() => {
-        navigate("/login");
+        navigate("/entrar");
       }, 1000);
     } else {
       setApiError("Ocorreu um erro no cadastro!");

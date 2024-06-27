@@ -11,7 +11,17 @@ export function NavBar() {
         onClick={() => navigate(`/`)}
         style={{ cursor: "pointer" }}
       />
-      <button className="btn btn-success">Entrar</button>
+      <div>
+        <button
+          className="btn btn-success me-1"
+          onClick={() => navigate(`/cadastrar`)}
+        >
+          Cadastrar
+        </button>
+        <button className="btn btn-success" onClick={() => navigate(`/entrar`)}>
+          Entrar
+        </button>
+      </div>
     </div>
   );
 }

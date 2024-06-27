@@ -3,26 +3,20 @@ import { NavBar } from "@/components/NavBar";
 import ProdutosService from "@/service/ProdutosService";
 import { useEffect, useState } from "react";
 import { Container, Row, Card, Button, Alert } from "react-bootstrap";
+import { useParams } from "react-router-dom";
 
 export function DetalhesProdutos() {
   const [produto, setProduto] = useState<IProduto>();
   const [apiError, setApiError] = useState("");
-
-
+  const params = useParams();
+ 
   useEffect(() => {
     carregarProduto();
   }, []);
 
-  const obterIdProduto = (): string => {
-    const urlAtual = window.location.href;
-    const partes = urlAtual.split("/");
-    const ultimoValor = partes[partes.length - 1];
-    return ultimoValor;
-  };
-
   const carregarProduto = async () => {
     try {
-      const response = await ProdutosService.findOne(obterIdProduto());
+      const response = await ProdutosService.findOne(params.id || '');
       if (response.status === 200) {
         setProduto(response.data);
       } else {

@@ -3,17 +3,13 @@ import { NavBar } from "@/components/NavBar";
 import PedidosService from "@/service/PedidosService";
 import { useEffect, useState } from "react";
 import { Card } from "react-bootstrap";
+import { useParams } from "react-router-dom";
 
 export function ListaDePedidos() {
   const [listaPedidos, setListaPedidos] = useState<IPedido[]>([]);
   const [apiError, setApiError] = useState("");
+  const params = useParams();
 
-  const obterIdUsuario= (): string => {
-    const urlAtual = window.location.href;
-    const partes = urlAtual.split("/");
-    const ultimoValor = partes[partes.length - 1];
-    return ultimoValor;
-  };
 
   useEffect(() => {
     loadData();
@@ -21,7 +17,7 @@ export function ListaDePedidos() {
 
   const loadData = async () => {
     try {
-      const response = await PedidosService.pedidosPorUsuario(Number(obterIdUsuario()));
+      const response = await PedidosService.pedidosPorUsuario(Number(params.id || ''));
       if (response.status === 200) {
         setListaPedidos(response.data);
       } else {
