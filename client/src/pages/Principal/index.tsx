@@ -15,27 +15,35 @@ export function Principal() {
     useState<ICategoria | null>(null);
 
   useEffect(() => {
-    loadData();
+    carregarDados();
   }, []);
 
   useEffect(() => {
     let filtered = listaProdutos;
-    if (pesquisa) {
-      filtered = listaProdutos.filter((produto) =>
-        produto.nome.toLowerCase().includes(pesquisa.toLowerCase())
-      );
-    }
-
-    if (categoriaSelecionada) {
+    if (pesquisa && (categoriaSelecionada?.id !== 0 && categoriaSelecionada?.id !== undefined)) {
       filtered = listaProdutos.filter(
-        (produto) => produto.categoria.id === categoriaSelecionada.id
+        (produto) =>
+          produto.nome.toLowerCase().includes(pesquisa.toLowerCase()) &&
+          produto.categoria.id === categoriaSelecionada?.id
       );
+    } else {
+      if (pesquisa) {
+        filtered = listaProdutos.filter((produto) =>
+          produto.nome.toLowerCase().includes(pesquisa.toLowerCase())
+        );
+      } else {
+        if (categoriaSelecionada?.id !== 0 && categoriaSelecionada?.id !== undefined) {
+          filtered = listaProdutos.filter(
+            (produto) => produto.categoria.id === categoriaSelecionada?.id
+          );
+        }
+      }
     }
 
     setlistaProdutosFiltrada(filtered);
   }, [pesquisa, categoriaSelecionada, listaProdutos]);
 
-  const loadData = async () => {
+  const carregarDados = async () => {
     try {
       const response = await ProdutosService.findAll();
       if (response.status === 200) {
@@ -62,6 +70,7 @@ export function Principal() {
           {listaProdutosFiltrada.map((produto) => (
             <CardProduto
               key={produto.idProduto}
+              id={produto.idProduto}
               titulo={produto.nome}
               preco={produto.preco}
               imagem={produto.imagem}
