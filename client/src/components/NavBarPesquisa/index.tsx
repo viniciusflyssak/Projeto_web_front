@@ -51,12 +51,15 @@ export function NavBarPesquisa({
           <div className="col-2">
             <Dropdown>
               <Dropdown.Toggle variant="secondary" id="dropdown-basic">
-                Categorias: {categoriaSelecionada ? categoriaSelecionada.nome : "Todas"}
+                Categorias:{" "}
+                {categoriaSelecionada ? categoriaSelecionada.nome : "Todas"}
               </Dropdown.Toggle>
               <Dropdown.Menu>
                 <Dropdown.Item
                   key={0}
-                  onClick={() => handleCategoriaSelect({ id: 0, nome: "Todas" })}
+                  onClick={() =>
+                    handleCategoriaSelect({ id: 0, nome: "Todas" })
+                  }
                 >
                   Todas
                 </Dropdown.Item>
@@ -81,7 +84,18 @@ export function NavBarPesquisa({
             />
           </div>
           <div className="col-3 text-end">
-            <button className="btn btn-success">Entrar</button>
+            <button
+              className="btn btn-success me-1"
+              onClick={() => navigate(`/cadastrar`)}
+            >
+              Cadastrar
+            </button>
+            <button
+              className="btn btn-success"
+              onClick={() => navigate(`/entrar`)}
+            >
+              Entrar
+            </button>
           </div>
         </div>
       </div>

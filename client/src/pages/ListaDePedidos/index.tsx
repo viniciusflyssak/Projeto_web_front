@@ -8,13 +8,20 @@ export function ListaDePedidos() {
   const [listaPedidos, setListaPedidos] = useState<IPedido[]>([]);
   const [apiError, setApiError] = useState("");
 
+  const obterIdUsuario= (): string => {
+    const urlAtual = window.location.href;
+    const partes = urlAtual.split("/");
+    const ultimoValor = partes[partes.length - 1];
+    return ultimoValor;
+  };
+
   useEffect(() => {
     loadData();
   }, []);
 
   const loadData = async () => {
     try {
-      const response = await PedidosService.pedidosPorUsuario(1);
+      const response = await PedidosService.pedidosPorUsuario(Number(obterIdUsuario()));
       if (response.status === 200) {
         setListaPedidos(response.data);
       } else {
