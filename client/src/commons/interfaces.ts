@@ -10,13 +10,11 @@ export interface IUserLogin {
   senha: string;
 }
 
-export interface IUser {
+export interface IUsuario {
   id: number;
   nome: string;
   username: string;
   email: string;
-  senha: string;
-  
 }
 
 export interface ICategoria {

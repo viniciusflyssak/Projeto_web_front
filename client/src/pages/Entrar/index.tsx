@@ -1,7 +1,8 @@
-import { IUserLogin } from "@/commons/interfaces";
+import { IUserLogin, IUsuario } from "@/commons/interfaces";
 import { Input } from "@/components/Input";
 import { NavBar } from "@/components/NavBar";
 import AuthService from "@/service/AuthService";
+import UsuarioService from "@/service/UsuarioService";
 import { ChangeEvent, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
@@ -36,6 +37,16 @@ export function Entrar() {
     const response = await AuthService.login(login);
     if (response.status === 200 || response.status === 201) {
       setApiSuccess("Login realizado com sucesso!");
+      const responseUsuario = await UsuarioService.findByUsername(
+        form.username
+      );
+      const usuario: IUsuario = {
+        id: responseUsuario.data.id,
+        email: responseUsuario.data.email,
+        nome: responseUsuario.data.nome,
+        username: responseUsuario.data.username,
+      };
+      localStorage.setItem("usuario", JSON.stringify(usuario));
       setTimeout(() => {
         navigate("/principal");
       }, 1000);
