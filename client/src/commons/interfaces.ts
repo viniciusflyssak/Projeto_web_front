@@ -42,6 +42,6 @@ export interface IPedido {
   valor: number;
   data: string;
   formaPagamento: number;
-  usuario: IUserSignup;
+  usuario: IUsuario;
   itensPedido: IItensPedido[];
 }

@@ -1,7 +1,9 @@
-import { useEffect, useState } from "react";
-import { IPedido} from "@/commons/interfaces";
+import { ChangeEvent, useEffect, useState } from "react";
+import { IPedido, IUsuario } from "@/commons/interfaces";
 import { NavBar } from "@/components/NavBar";
 import { useNavigate } from "react-router-dom";
+import AuthService from "@/service/AuthService";
+import PedidosService from "@/service/PedidosService";
 
 export function FinalizarCompra() {
   const navigate = useNavigate();
@@ -9,6 +11,7 @@ export function FinalizarCompra() {
   const [pendingApiCall, setPendingApiCall] = useState(false);
   const [apiSuccess, setApiSuccess] = useState("");
   const [apiError, setApiError] = useState("");
+  const [formaPagamento, setFormaPagamento] = useState('');
 
   useEffect(() => {
     loadData();
@@ -18,13 +21,61 @@ export function FinalizarCompra() {
     try {
       const pedidoString = localStorage.getItem("pedido");
       const pedidoObj: IPedido = pedidoString ? JSON.parse(pedidoString) : null;
+
+      const usuarioStr = localStorage.getItem("usuario");
+      const usuario: IUsuario = usuarioStr ? JSON.parse(usuarioStr) : null;
+
+      pedidoObj.usuario = usuario;
+
       setPedido(pedidoObj);
     } catch (error) {
-      setApiError("Falha ao carregar carrinho!");
+      setApiError("Falha ao carregar pedido!");
     }
   };
 
-  const onClickPost = async () => {};
+
+  const handleFormaPagamentoChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setFormaPagamento(event.target.value);
+  };
+
+  const obterFormaPagamento = () => {
+    switch (formaPagamento) {
+      case 'boleto':
+        return 0;
+      case 'cartaoCredito':
+        return 1;
+      case 'cartaoDebito':
+        return 2;
+      case 'pix':
+        return 3;
+      default:
+        return -1;
+    }
+  };
+  
+  const onClickPost = async (pedido: IPedido) => {
+    setPendingApiCall(true);
+
+    const dataAtual = new Date().toISOString();
+
+    pedido.data = dataAtual;
+    pedido.formaPagamento = obterFormaPagamento();
+
+
+    const response = await PedidosService.postPedido(pedido);
+    if (response.status === 200 || response.status === 201) {
+      setApiSuccess("Pedido realizado com sucesso!");
+      setTimeout(() => {
+        navigate("/principal");
+      }, 1000);
+    } else {
+      setApiError("Ocorreu um erro na realização do pedido!");
+      if (response.data.validationErrors) {
+      }
+    }
+
+    setPendingApiCall(false);
+  };
 
   return (
     <>
@@ -52,9 +103,9 @@ export function FinalizarCompra() {
                   {pedido?.itensPedido.map((item, index) => (
                     <tr key={index}>
                       <td></td>
-                      <td>{item.produto.idProduto}</td>
-                      <td>{item.produto.nome}</td>
-                      <td>{item.preco}</td>
+                      <td className="text-light bg-dark">{item.produto.idProduto}</td>
+                      <td className="text-light bg-dark">{item.produto.nome}</td>
+                      <td className="text-light bg-dark">{item.preco}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -140,11 +191,11 @@ export function FinalizarCompra() {
                       name="formaPagamento"
                       id="boleto"
                       value="boleto"
+                      checked={formaPagamento === 'boleto'}
+                      onChange={handleFormaPagamentoChange}
+                      defaultChecked 
                     />
-                    <label
-                      className="form-check-label text-light"
-                      htmlFor="boleto"
-                    >
+                    <label className="form-check-label text-light" htmlFor="boleto">
                       Boleto
                     </label>
                   </div>
@@ -155,11 +206,13 @@ export function FinalizarCompra() {
                       name="formaPagamento"
                       id="cartaoCredito"
                       value="cartaoCredito"
+                      checked={formaPagamento === 'cartaoCredito'}
+                      onChange={handleFormaPagamentoChange}
                     />
                     <label
                       className="form-check-label text-light"
                       htmlFor="cartaoCredito"
-                      style={{ fill: "green" }}
+                      style={{ fill: 'green' }}
                     >
                       Cartão de Crédito
                     </label>
@@ -171,11 +224,10 @@ export function FinalizarCompra() {
                       name="formaPagamento"
                       id="cartaoDebito"
                       value="cartaoDebito"
+                      checked={formaPagamento === 'cartaoDebito'}
+                      onChange={handleFormaPagamentoChange}
                     />
-                    <label
-                      className="form-check-label text-light"
-                      htmlFor="cartaoDebito"
-                    >
+                    <label className="form-check-label text-light" htmlFor="cartaoDebito">
                       Cartão de Débito
                     </label>
                   </div>
@@ -186,22 +238,17 @@ export function FinalizarCompra() {
                       name="formaPagamento"
                       id="pix"
                       value="pix"
+                      checked={formaPagamento === 'pix'}
+                      onChange={handleFormaPagamentoChange}
                     />
-                    <label
-                      className="form-check-label text-light"
-                      htmlFor="pix"
-                    >
+                    <label className="form-check-label text-light" htmlFor="pix">
                       PIX
                     </label>
                   </div>
                 </div>
               </div>
               <div className="col-12 mb-3 text-center text-light pt-4">
-                <button
-                  className="btn btn-success col-12"
-                  onClick={onClickPost}
-                  disabled={pendingApiCall}
-                >
+                <button className="btn btn-primary" onClick={( ) => pedido && onClickPost(pedido)}>
                   Confirmar Compra
                 </button>
                 {pendingApiCall && <p className="text-light">Aguarde...</p>}
