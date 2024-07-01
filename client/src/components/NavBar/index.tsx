@@ -1,6 +1,16 @@
+import { useEffect, useState } from "react";
+import { Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
+import { ButtonsNavBar } from "../ButtonsNavBar";
 
 export function NavBar() {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    setIsLoggedIn(!!token);
+  }, []);
+
   const navigate = useNavigate();
   return (
     <div className="bg-dark shadow-sm mb-2 d-flex align-items-center justify-content-between px-3">
@@ -11,17 +21,7 @@ export function NavBar() {
         onClick={() => navigate(`/`)}
         style={{ cursor: "pointer" }}
       />
-      <div>
-        <button
-          className="btn btn-success me-1"
-          onClick={() => navigate(`/cadastrar`)}
-        >
-          Cadastrar
-        </button>
-        <button className="btn btn-success" onClick={() => navigate(`/entrar`)}>
-          Entrar
-        </button>
-      </div>
+      <ButtonsNavBar />
     </div>
   );
 }

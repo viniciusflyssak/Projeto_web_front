@@ -3,6 +3,7 @@ import CategoriasService from "@/service/CategoriasService";
 import { useEffect, useState } from "react";
 import Dropdown from "react-bootstrap/Dropdown";
 import { useNavigate } from "react-router-dom";
+import { ButtonsNavBar } from "../ButtonsNavBar";
 
 interface NavBarProps {
   pesquisa: string;
@@ -84,18 +85,7 @@ export function NavBarPesquisa({
             />
           </div>
           <div className="col-3 text-end">
-            <button
-              className="btn btn-success me-1"
-              onClick={() => navigate(`/cadastrar`)}
-            >
-              Cadastrar
-            </button>
-            <button
-              className="btn btn-success"
-              onClick={() => navigate(`/entrar`)}
-            >
-              Entrar
-            </button>
+            <ButtonsNavBar />
           </div>
         </div>
       </div>
