@@ -43,7 +43,7 @@ export function FinalizarCompra() {
     try {
       const pedidosCarrinhoString = localStorage.getItem('pedidosCarrinho');
       if (pedidosCarrinhoString) {
-        const pedidosCarrinho = JSON.parse(pedidosCarrinhoString);
+        const pedidosCarrinho: IPedido = JSON.parse(pedidosCarrinhoString);
 
         pedido.id = pedidosCarrinho.id;
         pedido.valor = pedidosCarrinho.valor;
@@ -111,7 +111,7 @@ export function FinalizarCompra() {
     <>
       <NavBarPesquisa pesquisa={pesquisa} setPesquisa={setPesquisa} categoriaSelecionada={categoriaSelecionada} setCategoriaSelecionada={setCategoriaSelecionada} />
 
-      <div className="container-fluid bg-secondary d-grid place-items-center" style={{ minHeight: '100vh' }}>
+      <div className="container-fluid bg-secondary d-grid place-items-center" style={{ minHeight: '41.3rem' }}>
         <div className="row ">
           <div className="col-md-1"></div>
           <div className="col-md-7 p-10">
@@ -121,20 +121,20 @@ export function FinalizarCompra() {
                 <thead>
                   <tr style={{ borderBottom: '1px solid white' }}>
                     <th className="text-light bg-dark"></th>
-                    <th className="text-light bg-dark">ID</th>
+                    <th className="text-light bg-dark">Código</th>
                     <th className="text-light bg-dark">Nome</th>
                     <th className="text-light bg-dark">Preço</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {pedidosCarrinho.itensPedido.map((item, index) => (
+                  {/* {pedidosCarrinho.itensPedido.map((item, index) => (
                     <tr key={index}>
                       <td></td>
                       <td>{item.id}</td>
                       <td>{item.nome}</td>
                       <td>{item.preco}</td>
                     </tr>
-                  ))}
+                  ))} */}
                 </tbody>
               </table>
             </div>
