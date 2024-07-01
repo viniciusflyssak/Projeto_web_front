@@ -21,9 +21,20 @@ const login = async (user: IUserLogin): Promise<any> => {
   return response;
 };
 
+const isAuthenticated = (): boolean => {
+  const token = localStorage.getItem("token");
+  if (token) {
+    api.defaults.headers.common["Authorization"] = `Bearer ${JSON.parse(
+      token
+    )}`;
+  }
+  return token ? true : false;
+};
+
 const AuthService = {
   signup,
   login,	
+  isAuthenticated
 };
 
 export default AuthService;

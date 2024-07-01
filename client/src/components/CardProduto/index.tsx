@@ -1,14 +1,15 @@
+import { IProduto } from "@/commons/interfaces";
+import { adicionarAoCarrinho } from "@/commons/utils";
 import { Button, Card } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 
-function CardProduto(produto: {
-  id: number;
-  titulo: string;
-  preco: number;
-  imagem: string;
-}) {
+function CardProduto(produto: IProduto) {
   const navigate = useNavigate();
-  const id = produto.id;
+  const id = produto.idProduto;
+
+  const clickAdicionar = (produto: IProduto) => {
+    adicionarAoCarrinho(produto);
+  };
 
   return (
     <div className="col-3">
@@ -20,7 +21,7 @@ function CardProduto(produto: {
           style={{ width: "18rem", height: "18rem" }}
         />
         <Card.Body>
-          <Card.Title>{produto.titulo}</Card.Title>
+          <Card.Title>{produto.nome}</Card.Title>
           <Card.Text>R$ {produto.preco} </Card.Text>
           <div className="row">
             <div className="col-6">
@@ -32,7 +33,7 @@ function CardProduto(produto: {
               </Button>
             </div>
             <div className="col-6">
-              <Button variant="success">Adicionar ao carrinho</Button>
+              <Button variant="success" onClick={() => clickAdicionar(produto)}>Adicionar ao carrinho</Button>
             </div>
           </div>
         </Card.Body>

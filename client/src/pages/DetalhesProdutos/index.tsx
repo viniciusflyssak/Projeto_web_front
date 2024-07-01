@@ -1,4 +1,5 @@
 import { IProduto } from "@/commons/interfaces";
+import { adicionarAoCarrinho } from "@/commons/utils";
 import { NavBar } from "@/components/NavBar";
 import ProdutosService from "@/service/ProdutosService";
 import { useEffect, useState } from "react";
@@ -9,14 +10,14 @@ export function DetalhesProdutos() {
   const [produto, setProduto] = useState<IProduto>();
   const [apiError, setApiError] = useState("");
   const params = useParams();
- 
+
   useEffect(() => {
     carregarProduto();
   }, []);
 
   const carregarProduto = async () => {
     try {
-      const response = await ProdutosService.findOne(params.id || '');
+      const response = await ProdutosService.findOne(params.id || "");
       if (response.status === 200) {
         setProduto(response.data);
       } else {
@@ -27,8 +28,8 @@ export function DetalhesProdutos() {
     }
   };
 
-  const adicionarAoCarrinho = (produto: IProduto) => {
-    console.log(produto);
+  const clickAdicionar = (produto: IProduto) => {
+    adicionarAoCarrinho(produto);
   };
 
   return (
@@ -58,7 +59,7 @@ export function DetalhesProdutos() {
               </Card>
               <Button
                 variant="success"
-                onClick={() => adicionarAoCarrinho(produto!)}
+                onClick={() => clickAdicionar(produto!)}
                 className="mt-2 col-12"
               >
                 Adicionar ao carrinho
