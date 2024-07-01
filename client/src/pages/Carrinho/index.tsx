@@ -1,11 +1,13 @@
-import { IPedido } from "@/commons/interfaces";
+import { IPedido, IUsuario } from "@/commons/interfaces";
 import { NavBar } from "@/components/NavBar";
 import { useEffect, useState } from "react";
 import { Button, Card } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
 
 export function Carrinho() {
   const [pedido, setPedido] = useState<IPedido>();
   const [apiError, setApiError] = useState("");
+  const navigate = useNavigate();
 
   useEffect(() => {
     loadData();
@@ -20,6 +22,16 @@ export function Carrinho() {
       setApiError("Falha ao carregar carrinho!");
     }
   };
+
+  const finalizarClick = () => {
+    const usuario = localStorage.getItem("usuario");
+    const usuarioObj: IUsuario = usuario ? JSON.parse(usuario) : null;
+    if (usuarioObj) {
+      navigate(`/finalizar`);
+    } else {
+      navigate(`/entrar`);
+    }
+  }
 
   return (
     <>
@@ -60,7 +72,7 @@ export function Carrinho() {
                 </strong>
               </Card.Text>
               <div className="col-12 text-end pt-2 ms-0">
-                <Button className="btn-success" href="/finalizar">
+                <Button className="btn-success" onClick={finalizarClick}>
                   <h3>Finalizar compra</h3>
                 </Button>
               </div>
