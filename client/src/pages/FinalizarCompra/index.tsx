@@ -109,7 +109,7 @@ export function FinalizarCompra() {
 
   return (
     <>
-      <NavBarPesquisa pesquisa={pesquisa} setPesquisa={setPesquisa} categoriaSelecionada={categoriaSelecionada} setCategoriaSelecionada={setCategoriaSelecionada} />
+      <NavBar />
 
       <div className="container-fluid bg-secondary d-grid place-items-center" style={{ minHeight: '41.3rem' }}>
         <div className="row ">

@@ -1,20 +1,25 @@
 import { api } from "@/lib/axios";
 import { IUserLogin, IUserSignup } from "@/commons/interfaces";
 
-const signup = async (user: IUserSignup): Promise<any> => {
+const signup = async (user: IUserSignup) => {
   let response;
   try {
-    response = await api.post("/usuarios", user);
+    response = await api.post("/users", user);
   } catch (error: any) {
     response = error.response;
   }
   return response;
 };
 
-const login = async (user: IUserLogin): Promise<any> => {
+const login = async (user: IUserLogin) => {
   let response;
   try {
     response = await api.post("/login", user);
+    localStorage.setItem("token", JSON.stringify(response.data.token));
+
+    api.defaults.headers.common[
+      "Authorization"
+    ] = `Bearer ${response.data.token}`;
   } catch (error: any) {
     response = error.response;
   }
