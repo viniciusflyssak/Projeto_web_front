@@ -1,7 +1,7 @@
 import { IPedido } from "@/commons/interfaces";
 import { NavBar } from "@/components/NavBar";
 import { useEffect, useState } from "react";
-import { Card } from "react-bootstrap";
+import { Button, Card } from "react-bootstrap";
 
 export function Carrinho() {
   const [pedido, setPedido] = useState<IPedido>();
@@ -59,6 +59,11 @@ export function Carrinho() {
                   Valor total: R$ {pedido?.valor.toFixed(2).replace(".", ",")}
                 </strong>
               </Card.Text>
+              <div className="col-12 text-end pt-2 ms-0">
+                <Button className="btn-success" href="/finalizar">
+                  <h3>Finalizar compra</h3>
+                </Button>
+              </div>
             </Card.Body>
           </Card>
         </div>
