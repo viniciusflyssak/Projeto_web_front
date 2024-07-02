@@ -38,7 +38,7 @@ export interface IItensPedido {
 }
 
 export interface IPedido {
-  id: number;
+  id?: number | undefined;
   valor: number;
   data: string;
   formaPagamento: number;

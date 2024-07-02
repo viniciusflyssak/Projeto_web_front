@@ -10,7 +10,7 @@ export const adicionarAoCarrinho = (produto: IProduto) => {
       data: "",
       id: 0,
       formaPagamento: 0,
-      usuario: { username: "", nome: "", email: "", senha: "" },
+      usuario: { username: "", nome: "", email: "", id: 0},
     };
   }
   let itemPedido = pedidoObj.itensPedido.find(

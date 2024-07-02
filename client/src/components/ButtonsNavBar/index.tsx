@@ -19,12 +19,6 @@ export function ButtonsNavBar() {
     navigate(`/`);
   };
 
-  const meusPedidos = () => { 
-    const usuario = localStorage.getItem("usuario");
-    const usuarioObj: IUsuario = usuario ? JSON.parse(usuario) : null;
-    navigate(`/listaDePedidos/${usuarioObj.id}`);
-  };
-
   return (
     <div>
       {!isLoggedIn ? (
@@ -35,7 +29,9 @@ export function ButtonsNavBar() {
           Cadastrar
         </Button>
       ) : (
-        <Button className="btn btn-primary me-2" onClick={meusPedidos}>Meus pedidos</Button>
+        <Button className="btn btn-primary me-2" href="/listaDePedidos">
+          Meus pedidos
+        </Button>
       )}
 
       {!isLoggedIn ? (

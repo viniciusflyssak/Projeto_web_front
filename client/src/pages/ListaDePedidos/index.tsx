@@ -1,4 +1,4 @@
-import { IPedido } from "@/commons/interfaces";
+import { IPedido, IUsuario } from "@/commons/interfaces";
 import { NavBar } from "@/components/NavBar";
 import PedidosService from "@/service/PedidosService";
 import { useEffect, useState } from "react";
@@ -8,7 +8,6 @@ import { useParams } from "react-router-dom";
 export function ListaDePedidos() {
   const [listaPedidos, setListaPedidos] = useState<IPedido[]>([]);
   const [apiError, setApiError] = useState("");
-  const params = useParams();
 
 
   useEffect(() => {
@@ -17,7 +16,9 @@ export function ListaDePedidos() {
 
   const loadData = async () => {
     try {
-      const response = await PedidosService.pedidosPorUsuario(Number(params.id || ''));
+      const usuario = localStorage.getItem("usuario");
+      const usuarioObj: IUsuario = usuario ? JSON.parse(usuario) : null;
+      const response = await PedidosService.pedidosPorUsuario(usuarioObj.id || 0);
       if (response.status === 200) {
         setListaPedidos(response.data);
       } else {

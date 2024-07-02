@@ -11,7 +11,7 @@ export function FinalizarCompra() {
   const [pendingApiCall, setPendingApiCall] = useState(false);
   const [apiSuccess, setApiSuccess] = useState("");
   const [apiError, setApiError] = useState("");
-  const [formaPagamento, setFormaPagamento] = useState('');
+  const [formaPagamento, setFormaPagamento] = useState("");
 
   useEffect(() => {
     loadData();
@@ -33,39 +33,40 @@ export function FinalizarCompra() {
     }
   };
 
-
   const handleFormaPagamentoChange = (event: ChangeEvent<HTMLInputElement>) => {
     setFormaPagamento(event.target.value);
   };
 
   const obterFormaPagamento = () => {
     switch (formaPagamento) {
-      case 'boleto':
+      case "boleto":
         return 0;
-      case 'cartaoCredito':
+      case "cartaoCredito":
         return 1;
-      case 'cartaoDebito':
+      case "cartaoDebito":
         return 2;
-      case 'pix':
+      case "pix":
         return 3;
       default:
         return -1;
     }
   };
-  
-  const onClickPost = async (pedido: IPedido) => {
-    setPendingApiCall(true);
 
+  const onClickPost = async () => {
+    setPendingApiCall(true);
+    const pedidoObj: IPedido = pedido!;
+    
     const dataAtual = new Date().toISOString();
 
-    pedido.data = dataAtual;
-    pedido.formaPagamento = obterFormaPagamento();
+    pedidoObj.data = dataAtual;
+    pedidoObj.formaPagamento = obterFormaPagamento();
+    pedidoObj.id = undefined;
 
-
-    const response = await PedidosService.postPedido(pedido);
+    const response = await PedidosService.postPedido(pedidoObj);
     if (response.status === 200 || response.status === 201) {
       setApiSuccess("Pedido realizado com sucesso!");
       setTimeout(() => {
+        localStorage.removeItem("pedido");
         navigate("/principal");
       }, 1000);
     } else {
@@ -73,7 +74,7 @@ export function FinalizarCompra() {
       if (response.data.validationErrors) {
       }
     }
-
+    
     setPendingApiCall(false);
   };
 
@@ -97,15 +98,33 @@ export function FinalizarCompra() {
                     <th className="text-light bg-dark">Código</th>
                     <th className="text-light bg-dark">Nome</th>
                     <th className="text-light bg-dark">Preço</th>
+                    <th className="text-light bg-dark">Quantidade</th>
+                    <th className="text-light bg-dark">Valor total</th>
                   </tr>
                 </thead>
                 <tbody>
                   {pedido?.itensPedido.map((item, index) => (
                     <tr key={index}>
-                      <td></td>
-                      <td className="text-light bg-dark">{item.produto.idProduto}</td>
-                      <td className="text-light bg-dark">{item.produto.nome}</td>
+                      <td className="text-light bg-dark">
+                        {" "}
+                        <img
+                          src={item.produto.imagem}
+                          width="60"
+                          alt={item.produto.nome}
+                          style={{ cursor: "pointer" }}
+                        />
+                      </td>
+                      <td className="text-light bg-dark">
+                        {item.produto.idProduto}
+                      </td>
+                      <td className="text-light bg-dark">
+                        {item.produto.nome}
+                      </td>
                       <td className="text-light bg-dark">{item.preco}</td>
+                      <td className="text-light bg-dark">{item.qtde}</td>
+                      <td className="text-light bg-dark">
+                        {item.qtde * item.preco}
+                      </td>
                     </tr>
                   ))}
                 </tbody>
@@ -191,11 +210,14 @@ export function FinalizarCompra() {
                       name="formaPagamento"
                       id="boleto"
                       value="boleto"
-                      checked={formaPagamento === 'boleto'}
+                      checked={formaPagamento === "boleto"}
                       onChange={handleFormaPagamentoChange}
-                      defaultChecked 
+                      defaultChecked
                     />
-                    <label className="form-check-label text-light" htmlFor="boleto">
+                    <label
+                      className="form-check-label text-light"
+                      htmlFor="boleto"
+                    >
                       Boleto
                     </label>
                   </div>
@@ -206,13 +228,13 @@ export function FinalizarCompra() {
                       name="formaPagamento"
                       id="cartaoCredito"
                       value="cartaoCredito"
-                      checked={formaPagamento === 'cartaoCredito'}
+                      checked={formaPagamento === "cartaoCredito"}
                       onChange={handleFormaPagamentoChange}
                     />
                     <label
                       className="form-check-label text-light"
                       htmlFor="cartaoCredito"
-                      style={{ fill: 'green' }}
+                      style={{ fill: "green" }}
                     >
                       Cartão de Crédito
                     </label>
@@ -224,10 +246,13 @@ export function FinalizarCompra() {
                       name="formaPagamento"
                       id="cartaoDebito"
                       value="cartaoDebito"
-                      checked={formaPagamento === 'cartaoDebito'}
+                      checked={formaPagamento === "cartaoDebito"}
                       onChange={handleFormaPagamentoChange}
                     />
-                    <label className="form-check-label text-light" htmlFor="cartaoDebito">
+                    <label
+                      className="form-check-label text-light"
+                      htmlFor="cartaoDebito"
+                    >
                       Cartão de Débito
                     </label>
                   </div>
@@ -238,17 +263,23 @@ export function FinalizarCompra() {
                       name="formaPagamento"
                       id="pix"
                       value="pix"
-                      checked={formaPagamento === 'pix'}
+                      checked={formaPagamento === "pix"}
                       onChange={handleFormaPagamentoChange}
                     />
-                    <label className="form-check-label text-light" htmlFor="pix">
+                    <label
+                      className="form-check-label text-light"
+                      htmlFor="pix"
+                    >
                       PIX
                     </label>
                   </div>
                 </div>
               </div>
               <div className="col-12 mb-3 text-center text-light pt-4">
-                <button className="btn btn-primary" onClick={( ) => pedido && onClickPost(pedido)}>
+                <button
+                  className="btn btn-primary"
+                  onClick={() => onClickPost()}
+                >
                   Confirmar Compra
                 </button>
                 {pendingApiCall && <p className="text-light">Aguarde...</p>}

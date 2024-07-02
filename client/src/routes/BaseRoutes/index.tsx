@@ -22,7 +22,7 @@ export function BaseRoutes() {
         {/* Private routes */}
         <Route element={<AuthenticatedRoutes />}>
           {/* Adicione aqui suas rotas privadas */}
-          <Route path="/listaDePedidos/:id" element={<ListaDePedidos />} />{" "}
+          <Route path="/listaDePedidos" element={<ListaDePedidos />} />{" "}
           <Route path="/finalizar" element={<FinalizarCompra />} />
         </Route>
       </Routes>

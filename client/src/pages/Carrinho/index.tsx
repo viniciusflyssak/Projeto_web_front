@@ -31,6 +31,23 @@ export function Carrinho() {
     } else {
       navigate(`/entrar`);
     }
+  };
+
+  const deleteItem = (idProduto: number) => {
+    const index = pedido?.itensPedido.findIndex(
+      (item) => item.produto.idProduto === idProduto
+    );
+    if (index !== undefined && index !== -1) {
+      pedido?.itensPedido.splice(index, 1);
+    }
+
+    pedido!.valor = pedido?.itensPedido.reduce( 
+      (acc, item) => acc + item.preco * item.qtde, 0
+    ) || 0;
+
+    localStorage.setItem("pedido", JSON.stringify(pedido));
+
+    navigate("/carrinho");
   }
 
   return (
@@ -53,7 +70,31 @@ export function Carrinho() {
                         style={{ width: "30%" }}
                       />
                       <Card.Title>{item.produto.nome}</Card.Title>
-                      <Card.Text>Quantidade: {item.qtde}</Card.Text>
+                      <div className="row">
+                        <label style={{ width: "33%" }}>Quantidade: </label>
+                        <input
+                          type="number"
+                          value={item.qtde}
+                          style={{ width: "20%" }}
+                          onChange={(e) => {
+                            const newQtde = parseInt(e.target.value);
+                            const updatedPedido = { ...pedido };
+                            const itemIndex = updatedPedido.itensPedido.findIndex(
+                              (i) => i.produto.idProduto === item.produto.idProduto
+                            );
+                            if (itemIndex !== -1) {
+                              updatedPedido.itensPedido[itemIndex].qtde = newQtde;
+                              updatedPedido.valor = updatedPedido.itensPedido.reduce(
+                                (acc, item) => acc + item.preco * item.qtde,
+                                0
+                              );
+                              setPedido(updatedPedido);
+                              localStorage.setItem("pedido", JSON.stringify(updatedPedido));
+                            }
+                          }}
+                        />
+                      </div>
+
                       <Card.Text>
                         Valor unitário: R${" "}
                         {item.preco.toFixed(2).replace(".", ",")}
@@ -62,6 +103,9 @@ export function Carrinho() {
                         Valor total: R${" "}
                         {(item.preco * item.qtde).toFixed(2).replace(".", ",")}
                       </Card.Text>
+                      <Button className="btn-danger" onClick={() => deleteItem(item.produto.idProduto)}>
+                        Remover do carrinho
+                      </Button>
                     </Card.Body>
                   </Card>
                 ))}
@@ -71,10 +115,21 @@ export function Carrinho() {
                   Valor total: R$ {pedido?.valor.toFixed(2).replace(".", ",")}
                 </strong>
               </Card.Text>
-              <div className="col-12 text-end pt-2 ms-0">
-                <Button className="btn-success" onClick={finalizarClick}>
-                  <h3>Finalizar compra</h3>
-                </Button>
+              <div className="col-12 pt-2 ms-0 row">
+                <div className="col-6 text-start">
+                  <Button className="btn-primary" href="/principal">
+                    <h3>Continuar comprando </h3>
+                  </Button>
+                </div>
+                <div className="text-end col-6">
+                  {pedido?.itensPedido.length ? (
+                    <Button className="btn-success" onClick={finalizarClick}>
+                      <h3>Finalizar compra</h3>
+                    </Button>
+                  ) : (
+                    <></>
+                  )}
+                </div>
               </div>
             </Card.Body>
           </Card>
