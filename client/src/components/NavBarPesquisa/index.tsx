@@ -50,13 +50,14 @@ export function NavBarPesquisa({
             />
           </div>
           <div className="col-2">
-            <Dropdown>
+            <Dropdown className="dropdown-categorias">
               <Dropdown.Toggle variant="secondary" id="dropdown-basic">
                 Categorias:{" "}
                 {categoriaSelecionada ? categoriaSelecionada.nome : "Todas"}
               </Dropdown.Toggle>
               <Dropdown.Menu>
                 <Dropdown.Item
+                  className="dropdown-item"
                   key={0}
                   onClick={() =>
                     handleCategoriaSelect({ id: 0, nome: "Todas" })
@@ -66,6 +67,7 @@ export function NavBarPesquisa({
                 </Dropdown.Item>
                 {categorias.map((categoria) => (
                   <Dropdown.Item
+                    className="dropdown-item"
                     key={categoria.id}
                     onClick={() => handleCategoriaSelect(categoria)}
                   >
@@ -79,6 +81,7 @@ export function NavBarPesquisa({
             <input
               type="text"
               className="form-control"
+              name="pesquisa"
               placeholder="Pesquisar"
               value={pesquisa}
               onChange={(e) => setPesquisa(e.target.value)}

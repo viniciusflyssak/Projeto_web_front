@@ -277,7 +277,7 @@ export function FinalizarCompra() {
               </div>
               <div className="col-12 mb-3 text-center text-light pt-4">
                 <button
-                  className="btn btn-primary"
+                  className="btn btn-primary btn-confirmar"
                   onClick={() => onClickPost()}
                 >
                   Confirmar Compra

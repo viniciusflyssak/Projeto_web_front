@@ -50,7 +50,7 @@ export function ListaDePedidos() {
       <main className="container">
         <div className="row">
           {listaPedidos.map((pedido) => (
-            <Card style={{ width: "100%" }} className="bg-light shadow-sm mt-2">
+            <Card style={{ width: "100%" }} className="bg-light shadow-sm mt-2 card-pedido">
               <Card.Body>
                 <Card.Title>
                   {new Date(pedido.data.replace("-", "/")).toLocaleDateString(

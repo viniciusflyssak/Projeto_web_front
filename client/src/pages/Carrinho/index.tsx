@@ -62,7 +62,7 @@ export function Carrinho() {
               </Card.Text>
               <div className="row">
                 {pedido?.itensPedido.map((item) => (
-                  <Card style={{ width: "30%" }} className="me-2 mb-2">
+                  <Card style={{ width: "30%" }} className="me-2 mb-2 item-carrinho">
                     <Card.Body>
                       <Card.Img
                         variant="top"
@@ -123,7 +123,7 @@ export function Carrinho() {
                 </div>
                 <div className="text-end col-6">
                   {pedido?.itensPedido.length ? (
-                    <Button className="btn-success" onClick={finalizarClick}>
+                    <Button className="btn-success btn-finalizar" onClick={finalizarClick}>
                       <h3>Finalizar compra</h3>
                     </Button>
                   ) : (

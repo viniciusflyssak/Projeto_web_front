@@ -87,7 +87,7 @@ export function Principal() {
             />
           ))}
         </div>
-        {apiError && <p>{apiError}</p>}
+        {apiError && <p className="msg-erro-carregamento">{apiError}</p>}
       </main>
       <Button
         variant="warning"

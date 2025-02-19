@@ -115,7 +115,7 @@ export function Entrar() {
               </div>
               <div className="text-center">
                 <button
-                  className="btn btn-primary btn-success"
+                  className="btn btn-primary btn-success btn-login"
                   onClick={onClickLogin}
                   disabled={pendingApiCall}
                 >

@@ -50,7 +50,7 @@ export function DetalhesProdutos() {
               </Card>
             </div>
             <div className="col-6">
-              <Card body style={{ height: "60%" }}>
+              <Card body style={{ height: "60%" }} className="card-detalhes-produto">
                 <Card.Title as="h1">{produto?.nome}</Card.Title>
                 <Card.Text>{produto?.descricao}</Card.Text>
               </Card>
